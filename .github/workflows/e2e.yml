@@ -1,0 +1,28 @@
+name: Node.js CI
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+    pull_request:
+        branches:
+            - main
+            - develop
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: borales/actions-yarn@v2.3.0
+              with:
+                  cmd: install # will run `yarn install` command
+            - name: Install dependencies
+              run: npx yarn install --pure-lockfile
+            - name: Run unit tests
+              run: npm run test:unit
+            - name: Run e2e tests
+              run: npm run test:e2e:mocha

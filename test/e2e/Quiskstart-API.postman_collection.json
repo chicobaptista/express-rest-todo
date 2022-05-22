@@ -1,0 +1,156 @@
+{
+	"info": {
+		"_postman_id": "c9bdff2c-ee25-4e9b-83d9-0e37e20ef119",
+		"name": "Quiskstart-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Msg",
+			"item": [
+				{
+					"name": "Create Message",
+					"item": [
+						{
+							"name": "On valid payload",
+							"item": [
+								{
+									"name": "Should return message on body",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is CREATED\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"pm.test(\"Has msg on response body\", function () {",
+													"    const jsonData = pm.response.json();",
+													"    pm.expect(jsonData.msg).to.eql(\"test message\");",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"msg\": \"test message\",\n    \"msg1\": \"test message 2\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:3000/msg",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "3000",
+											"path": [
+												"msg"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "On invalid payload",
+							"item": [
+								{
+									"name": "Should return a bad request status and descriptive message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is BAD_REQUEST\", function () {",
+													"    pm.response.to.have.status(400);",
+													"});",
+													"const jsonData = pm.response.json();",
+													"pm.test(\"Has error type 'PayloadValidationError'\", function () {",
+													"    pm.expect(jsonData.type).to.eql(\"PayloadValidationError\");",
+													"});",
+													"pm.test(\"Has error message 'missing field'\", function () {",
+													"    pm.expect(jsonData.message).to.eql(\"body.msg is a required field\");",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"msg2\": \"test message\",\n    \"msg1\": \"test message 2\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseURL}}/{{route_msg}}",
+											"host": [
+												"{{baseURL}}"
+											],
+											"path": [
+												"{{route_msg}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "test_msg",
+			"value": "test",
+			"type": "string"
+		},
+		{
+			"key": "route_msg",
+			"value": "msg",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}
